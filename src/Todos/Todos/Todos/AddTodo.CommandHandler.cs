@@ -3,7 +3,9 @@ using Todos.Core;
 
 namespace Todos.Todos;
 
-public class AddTodoCommandHandler(ITodoRepository repository) : IRequestHandler<AddTodoCommand, AddTodoResponse>
+public class AddTodoCommandHandler(
+    ITodoRepository repository,
+    IPublisher publisher) : IRequestHandler<AddTodoCommand, AddTodoResponse>
 {
     public Task<AddTodoResponse> Handle(AddTodoCommand command, CancellationToken cancellationToken)
     {
@@ -14,6 +16,8 @@ public class AddTodoCommandHandler(ITodoRepository repository) : IRequestHandler
         repository.AddTodo(entity);
 
         var response = mapper.FromEntity(entity);
+
+        publisher.Publish(new AddTodoEvent(TodoId: entity.Id));
 
         return Task.FromResult(response);
     }

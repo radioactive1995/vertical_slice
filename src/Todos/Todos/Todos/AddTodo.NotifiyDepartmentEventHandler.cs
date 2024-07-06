@@ -6,6 +6,7 @@ public class NotifiyDepartmentEventHandler(ILogger<NotifiyDepartmentEventHandler
 {
     public Task Handle(AddTodoEvent @event, CancellationToken cancellationToken)
     {
-
+        logger.LogInformation("Todo with id {todoId} has been created, notifying the department.", @event.TodoId);
+        return Task.CompletedTask;
     }
 }
